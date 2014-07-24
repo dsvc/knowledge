@@ -1,0 +1,247 @@
+Sub CATMain()
+'On Error Resume next
+	
+
+  '***Deklarationen
+Dim objWindows As Windows
+Dim objDoc As Document
+Dim strTyp As String
+Dim objDatei As Product
+
+
+    '***Abfrage nach geöffnetem Dokument
+Set objWindows = CATIA.Windows
+ If objWindows.Count = 0 Then
+ MsgBox "Es ist kein Dokument geöffnet." + vbNewLine + _
+  "Das Makro kann nicht ausgeführt werden und wird beendet.", vbCritical + vbOKOnly, "Kein Dokument offen"
+ Exit Sub
+ End If
+
+
+    '***Auslesen der Dokumentart
+Set objDoc = CATIA.ActiveDocument
+strTyp = TypeName(objDoc)
+If strTyp = "DrawingDocument" Then
+MsgBox "Dieses Dokument ist ein Drawing." + vbNewLine + _
+"Das Makro kann nicht ausgeführt werden und wird beendet.", vbCritical + vbOKOnly, "Falscher Dokumententyp"
+Exit Sub
+End If
+
+Dim str,str1 As String
+Dim str2 As String
+Dim str3 As String
+Dim i,e,d As Integer
+Dim hBodyOption As HybridBody
+Dim hBodyAdd As HybridBody
+Dim hBodyPoints As HybridBody
+
+
+Set pDoc = CATIA.ActiveDocument
+Set part = pDoc.Part
+'Set hBodies = part.HybridBodies
+Set hBodiesOption = part.HybridBodies
+Dim hBodiesAdd As HybridBodies
+Dim hBodiesPoints As HybridBodies
+
+
+Set hBodyOption =hBodiesOption.Item("#Bodenplatte_Option")
+Set hBodyRefPlane =hBodiesOption.Item("#Bodenplatte_I")
+
+Set hBodyiesAdd = hBodyOption.HybridBodies
+Set hBodyAdd =hBodyiesAdd.Item("#Bodenplatte_Ref.Add")
+Set hBodyiesPoints =  hBodyAdd.HybridBodies
+Set hBodyPoints =hBodyiesPoints.Item("#Point_Hof_y")
+
+
+Set hBodyPlane_Hof_y = hBodyiesPoints.Item("#Plane_Hof_y")
+Set hBodyPoint_Hof_x = hBodyiesPoints.Item("#Point_Hof_x")
+Set hBodyIntersec_point =  hBodyiesPoints.Item("#Intersec_point")
+Set hBodyPoint_Hof_y =  hBodyiesPoints.Item("#Point_Hof_y")
+Set hBodyCurve =  hBodyiesPoints.Item("#Curve")
+Set hBodyStep_Points = hBodyiesPoints.Item("#Step_Points")
+Set hBodyPlanes =  hBodyiesPoints.Item("#Planes")
+
+
+Set param = part.Parameters
+Set paramSet = param.RootParameterSet
+Set paramSets = paramSet.ParameterSets
+Set paramSets1 = paramSets.GetItem("Blister")
+
+Dim oParameters  As Parameters
+Dim oParameter1,oParameter2  As Parameter
+'Set oParameters = part.Parameters.RootParameterSet.DirectParameters
+Set oParameters = paramSets1.DirectParameters
+
+Dim Was(1)
+Was(0) = "Point"
+Was(1) = "Line"
+
+Dim USelection As Selection
+Set USelection = pDoc.Selection
+USelection.Clear
+
+Dim F As CATBSTR
+F = USelection.SelectElement2(Was,"Point auswählen !",True)
+
+if F ="Normal" Then
+
+Set Start =USelection.Item(1)
+
+Else
+Msgbox("Abbruch")
+
+End if
+USelection.Clear
+
+
+
+Dim strDoppelPattern As String
+Dim iAnzahl_Bahnen As Integer
+Dim iAnzahl_Blister As Integer
+Dim iHof_Breite As Integer
+Dim iHof_Tiefe As Integer
+Dim dAbstand_Y As  Double
+Dim dAbstand_X  As Double
+Dim dAbstand_Blister  As Double
+Dim dAbstand_Bahnen  As Double
+Dim  iAnzahl_X  As Integer
+Dim  iAnzahl_Y  As Integer
+Dim dX As Double
+Dim dY As Double
+Dim dZ As Double
+
+
+'Set  iHof_Breite = oParameters.Item("Anzahl_Hoefe_(Breite)")
+'Set  iHof_Tiefe = oParameters.Item("Anzahl_Hoefe_(Tiefe)")
+'Set  dAbstand_Breite = oParameters.Item("Abstand_Hoefe_(Breite)")
+'Set  dAbstand_Tiefe = oParameters.Item("Abstand_Hoefe_(Tiefe)")
+'Set strDoppelPattern = oParameters.Item("DoppelPattern")
+'Set dAnzahl_Breite = pDoc.Part.Parameters.Item("Anzahl_Breite")
+'Set dAnzahl_Tiefe = pDoc.Part.Parameters.Item("Anzahl_Tiefe")
+
+Set iAnzahl_X = pDoc.Part.Parameters.Item("Anzahl_X")
+Set iAnzahl_Y = pDoc.Part.Parameters.Item("Anzahl_Y")
+
+Set dAbstand_X = pDoc.Part.Parameters.Item("X")
+Set dAbstand_Y = pDoc.Part.Parameters.Item("Y")
+
+'Set  iAnzahl_Blister = oParameters.Item("Anzahl_Blister")
+'Set  iAnzahl_Bahnen = oParameters.Item("Anzahl_Bahnen")
+'Set  dAbstand_Blister = oParameters.Item("Abstand_Blister")
+'Set  dAbstand_Bahnen = oParameters.Item("Abstand_Bahnen")
+
+dZ = 0.0
+
+Dim oHSF As HybridShapeFactory
+Dim refStartP As AnyObject
+Dim refPlane As AnyObject
+Dim refPlaneB As AnyObject
+Dim ref As Reference
+Dim Start As AnyObject
+Dim refStartPBlister As AnyObject
+Dim refStartP_Bodenplatte As AnyObject
+Dim refStartP_Bodenplatte_II As AnyObject
+
+Dim pPointX As  HybridShapePointCoordWithReference
+Dim pPointY As  HybridShapePointCoordWithReference
+Dim pPlaneY As HybridShapePlaneOffset
+Set oHSF = part.HybridShapeFactory
+'Set hShapesPosition =   hBodyPosition.HybridShapes
+Set hShapesPlane_Hof_y = hBodyPlane_Hof_y.HybridShapes
+Set hShapesPoint_Hof_x = hBodyPoint_Hof_x.HybridShapes
+Set hShapesPoint_Hof_y = hBodyPoint_Hof_y.HybridShapes
+Set hShapesIntersec_point = hBodyIntersec_point.HybridShapes
+Set hShapesCurve = hBodyCurve.HybridShapes
+Set hShapesStep_Points = hBodyStep_Points.HybridShapes
+Set hShapesPlanes = hBodyPlanes.HybridShapes
+Set hShapesBlister = hBodyRefPlane.HybridShapes
+Set  refPlane =hShapesBlister.Item("Breite_zx")
+Set  refPlaneB =hShapesBlister.Item("Breite_yz")
+
+
+Set refStartPBlister = Start
+
+
+'########## Point  defintion Y _I##########
+ReDim oY1Array(iAnzahl_Y.Value)
+dY = 0.00
+Set pPointY = refStartPBlister
+
+For i =1 to  iAnzahl_Y.Value            
+str = i
+Set oY1Array(i) = pPointY
+Set pPointY = oHSF.AddNewPointCoordWithReference (0.00,dY*(-1),dZ,oY1Array(i))
+'dY = (dAbstand_Y.Value) *( i)
+pPointY.Name = "Y_Point_"&str
+hBodyPoint_Hof_y.AppendHybridShape pPointY
+
+dY = (dAbstand_Y.Value)
+
+Next
+'########## Point  defintion X _I##########
+ReDim oX1Array(iAnzahl_X.Value)
+dX = 0.00
+Set pPointX = refStartPBlister
+
+For i =1 to  iAnzahl_X.Value            
+str = i
+Set oX1Array(i) = pPointX
+Set pPointX = oHSF.AddNewPointCoordWithReference (dX,0.00,dZ,oX1Array(i))
+'dX = (dAbstand_X.Value) *( i)
+pPointX.Name = "X_Point_"&str
+hBodyPoint_Hof_x.AppendHybridShape pPointX
+
+dX = (dAbstand_X.Value)
+
+Next
+
+
+'############Plane defintion Y _I##########
+'Set pPlaneY = oHSF.AddNewPlaneOffsetPt(refPlane,pPointY)
+'pPlaneY.Name = "Y_Plane_"&str
+'hBodyPlane_Hof_y.AppendHybridShape pPlaneY
+
+'################# Kanal Curve_Blister_I ####
+'Dim CurveLength As Double
+'CurveLength =  20                               'dAbstand_Tiefe.Value * iHof_Tiefe.Value
+'Dim hybridShapeTranslate As HybridShape
+'Dim hybridShapeDirection As HybridShapeDirection
+'Set hybridShapeTranslate =  hShapesBlister.Item("Breite_zx")'     
+'Set ref = part.CreateReferenceFromObject(pPointY)
+'Set hybridShapeDirection = oHSF.AddNewDirection(hybridShapeTranslate)
+'Dim hybridShapeLinePtDir As HybridShapeLinePtDir
+'Set hybridShapeLinePtDir =oHSF.AddNewLinePtDir(ref, hybridShapeDirection, 0.000000,CurveLength , true)
+'hybridShapeLinePtDir.Name = "zx_Curve_start."&i
+'hBodyCurve.AppendHybridShape hybridShapeLinePtDir
+
+
+selection.Clear
+part.update
+
+
+'***Abfrage ob die Funktion einen Fehler ausgelöst hat
+For i=1 To 1
+If Err.Number <> 0 then
+	if part.IsUpToDate = False then
+	MyWait 3
+	else
+	Err.Description = "VB_Bodenplatte_Option"
+	AppErr
+	Exit Sub
+	End If
+End If
+Next
+
+End Sub
+
+Private Function AppErr()
+
+	MsgBox "Fehler:" + Chr(10) + Chr(10) + _
+                   "Fehlernummer:" + chr(9) + CStr(Err.Number) + Chr(10) + _
+                   "Fehlerquelle:" + chr(9) + CStr(Err.Source) + Chr(10) + _
+                   "Beschreibung:" + chr(9) + CStr(Err.Description), vbOKOnly, "**CENIT AG**"
+
+End Function
+
+
+
