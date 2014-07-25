@@ -3,6 +3,7 @@ UserDefinedType isa Package
 {
 	KanalDressupUnten isa MechanicalFeature
 	{
+		Dressup_unten_KL = 0 , Type : LENGTH ;
 		RKanal = 0 , Type : LENGTH ;
 		AFase = 0 , Type : LENGTH ;
 		tiefe_unten = 0 , Type : LENGTH ;
