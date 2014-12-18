@@ -3,11 +3,11 @@ UserDefinedType isa Package
 {
 	RoehrchenFlach isa MechanicalFeature
 	{
-		`Fase` = 0 , Type : `LENGTH` NLSName : `Fase` ;
-		`A1` = 0 , Type : `ANGLE` NLSName : `A1` ;
-		`Radius` = 0 , Type : `LENGTH` NLSName : `Radius` ;
-		`#Ref` = 0 , Type : `Feature` NLSName : `#Ref` ;
-		`#Top` = 0 , Type : `Feature` NLSName : `#Top` ;
-		`xy` = 0 , Type : `Feature` NLSName : `xy` ;
+		A = 0 , Type : ANGLE ;
+		B = 0 , Type : LENGTH ;
+		R = 0 , Type : LENGTH ;
+		`#Ref` = 0 , Type : Feature NLSName : `#Ref` ;
+		`#Top` = 0 , Type : Feature NLSName : `#Top` ;
+		xy = 0 , Type : Feature ;
 	}
 }
