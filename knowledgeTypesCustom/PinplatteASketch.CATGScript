@@ -3,10 +3,11 @@ UserDefinedType isa Package
 {
 	PinplatteASketch isa SkinFeature
 	{
-		`Kugelfraeser-Rasternullpunkt` = 0 , Type : `Feature` NLSName : `Kugelfraeser-Rasternullpunkt` ;
-		`Top` = 0 , Type : `Feature` NLSName : `Top` ;
-		`#Ref` = 0 , Type : `Feature` NLSName : `#Ref` ;
-		`xy` = 0 , Type : `Feature` NLSName : `xy` ;
-		`AXS` = 0 , Type : `Feature` NLSName : `AXS` ;
+		`Kugelfraeser-Rasternullpunkt` = 0 , Type : Feature NLSName : `Kugelfraeser-Rasternullpunkt` ;
+		`#Kugel` = 0 , Type : LENGTH NLSName : `#Kugel` ;
+		Top = 0 , Type : Feature ;
+		`#Ref` = 0 , Type : Feature NLSName : `#Ref` ;
+		xy = 0 , Type : Feature ;
+		AXS = 0 , Type : Feature ;
 	}
 }

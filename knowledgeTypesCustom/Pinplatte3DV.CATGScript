@@ -3,15 +3,15 @@ UserDefinedType isa Package
 {
 	Pinplatte3DV isa MechanicalFeature
 	{
-		`AXS` = 0 , Type : `Feature` NLSName : `AXS` ;
-		`Kugelfraeser-Rasternullpunkt` = 0 , Type : `Feature` NLSName : `Kugelfraeser-Rasternullpunkt` ;
-		`B_V_3D` = 0 , Type : `LENGTH` NLSName : `B_V_3D` ;
-		`GL` = 0 , Type : `LENGTH` NLSName : `GL` ;
-		`R` = 0 , Type : `LENGTH` NLSName : `R` ;
-		`B` = 0 , Type : `LENGTH` NLSName : `B` ;
-		`L1` = 0 , Type : `LENGTH` NLSName : `L1` ;
-		`Ref` = 0 , Type : `Feature` NLSName : `Ref` ;
-		`xy` = 0 , Type : `Feature` NLSName : `xy` ;
-		`Top` = 0 , Type : `Feature` NLSName : `Top` ;
+		AXS = 0 , Type : Feature ;
+		`#Kugel` = 0 , Type : LENGTH NLSName : `#Kugel` ;
+		B_V_3D = 0 , Type : LENGTH ;
+		GL = 0 , Type : LENGTH ;
+		R = 0 , Type : LENGTH ;
+		B = 0 , Type : LENGTH ;
+		L1 = 0 , Type : LENGTH ;
+		Ref = 0 , Type : Feature ;
+		xy = 0 , Type : Feature ;
+		Top = 0 , Type : Feature ;
 	}
 }
